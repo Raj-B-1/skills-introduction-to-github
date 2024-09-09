@@ -32,3 +32,58 @@ FROM Invoice
 JOIN Customer ON Invoice.CustomerId = Customer.CustomerId
 GROUP BY Customer.CustomerId, Customer.FirstName, Customer.LastName
 ORDER BY TotalSales DESC;
+--Part 2
+--1. Design Your Database
+--2. Create the Tables
+CREATE TABLE Parks (
+    ParkId INT PRIMARY KEY,
+    ParkName TEXT,
+    Location TEXT,
+    OpeningDate DATE,
+    SizeAcres INT
+);
+CREATE TABLE Tickets (
+    VisitorId INT PRIMARY KEY,
+    FirstName TEXT,
+    LastName TEXT,
+    Email TEXT,
+    PhoneNumber BIGINT
+);
+CREATE TABLE Tickets (
+    TicketId INT PRIMARY KEY,
+    FOREIGN KEY (VisitorId) REFERENCES Visitors(VisitorId),
+    FOREIGN KEY (ParkId) REFERENCES Parks(ParkId),
+    Price INT
+);
+--3. Insert Data
+INSERT INTO Parks (ParkId, ParkName, Location, OpeningDate, SizeAcres)
+VALUES 
+(1, 'Disneyland', 'Anaheim, CA', '1955-07-17', 500),
+(2, 'Walt Disney World', 'Orlando, FL', '1971-10-01', 27520),
+(3, 'Tokyo Disneyland', 'Urayasu, Chiba, Japan', '1983-04-15', 115),
+(4, 'Disneyland Paris', 'Marne-la-Vallée, France', '1992-04-12', 5200),
+(5, 'Hong Kong Disneyland', 'Lantau Island, Hong Kong', '2005-09-12', 310);
+
+INSERT INTO Visitors (VisitorId, FirstName, LastName, Email, PhoneNumber)
+VALUES 
+(1, 'Thomas', 'Smith', 'thomassmith@gmail.com', 9087981928),
+(2, 'Mickey', 'Jones', 'mickeyjones@gmail.com', 7898901928),
+(3, 'Minnie', 'Jones', 'minniejones@gmail.com', 4567891933),
+(4, 'George', 'Jones', 'georgejackson@gmail.com', 6789081932),
+(5, 'Ronald', 'Joe', 'ronaldjoe@gmail.com', 7893451934);
+
+INSERT INTO Tickets (TicketId, VisitorId, ParkId, Price)
+VALUES 
+(1, 1, 1, 160),
+(2, 2, 3, 55),
+(3, 3, 5, 13),
+(4, 4, 2, 154),
+(5, 5, 4, 98);
+
+--4. Write Queries
+SELECT ParkName, Location FROM Parks
+SELECT FirstName, LastName FROM Visitors
+JOIN Tickets ON Visitors.VisitorId = Tickets.VisitorId;
+SELECT Tickets.TicketId, Visitors.FirstName, Visitors.LastName, Tickets.Price
+FROM Tickets
+JOIN Visitors ON Tickets.VisitorId = Visitors.VisitorId;
